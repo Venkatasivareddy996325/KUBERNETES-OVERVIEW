@@ -1,0 +1,189 @@
+Here is a **complete guide to Kubernetes (K8s) commands** with **detailed explanations**, organized by category so you can easily refer and learn.
+
+---
+
+## 🚀 1. **Basic kubectl Commands**
+
+| Command                | Explanation                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| `kubectl version`      | Shows client and server versions of kubectl and Kubernetes cluster. Useful to verify compatibility. |
+| `kubectl cluster-info` | Displays cluster endpoint details (API server, DNS, etc). Confirms cluster accessibility.           |
+| `kubectl config view`  | Shows kubeconfig file details including context, cluster, and user config.                          |
+| `kubectl get nodes`    | Lists all worker and master nodes in the cluster with status.                                       |
+| `kubectl get pods`     | Lists all pods in the default namespace. Add `-A` or `--all-namespaces` for all.                    |
+| `kubectl get services` | Lists all services (ClusterIP, NodePort, LoadBalancer) in the namespace.                            |
+
+---
+
+## 🧱 2. **Creating Resources**
+
+| Command                                                     | Explanation                                                          |
+| ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| `kubectl apply -f <filename>.yaml`                          | Creates or updates resources from a YAML file. Declarative approach. |
+| `kubectl create deployment nginx --image=nginx`             | Creates a deployment named nginx with nginx image.                   |
+| `kubectl expose deployment nginx --port=80 --type=NodePort` | Exposes the deployment as a NodePort service.                        |
+| `kubectl run nginx --image=nginx`                           | (Legacy) Runs a single pod with nginx image.                         |
+| `kubectl create -f <resource>.yaml`                         | Imperative command to create resource from file.                     |
+
+---
+
+## 🔎 3. **Inspecting & Debugging**
+
+| Command                               | Explanation                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------------ |
+| `kubectl describe pod <pod-name>`     | Detailed info of the pod: events, containers, IP, volumes. Good for debugging. |
+| `kubectl logs <pod-name>`             | Prints logs of a pod. Use `-c <container>` if multiple containers exist.       |
+| `kubectl get events`                  | Lists recent events like pod failures, scheduling issues.                      |
+| `kubectl exec -it <pod> -- /bin/bash` | Opens a shell session inside the pod container.                                |
+| `kubectl top pod`                     | Shows CPU and memory usage of pods (requires Metrics Server).                  |
+
+---
+
+## 📦 4. **Working with Deployments**
+
+| Command                                       | Explanation                                          |
+| --------------------------------------------- | ---------------------------------------------------- |
+| `kubectl get deployments`                     | Lists all deployments in the current namespace.      |
+| `kubectl scale deployment nginx --replicas=5` | Scales the deployment to 5 replicas.                 |
+| `kubectl rollout status deployment/nginx`     | Shows rollout progress (e.g., when updating images). |
+| `kubectl rollout undo deployment/nginx`       | Reverts deployment to the previous revision.         |
+| `kubectl delete deployment nginx`             | Deletes the specified deployment.                    |
+
+---
+
+## ⚙️ 5. **Managing Namespaces**
+
+| Command                                                | Explanation                                        |
+| ------------------------------------------------------ | -------------------------------------------------- |
+| `kubectl get namespaces`                               | Lists all available namespaces.                    |
+| `kubectl create namespace dev`                         | Creates a new namespace `dev`.                     |
+| `kubectl config set-context --current --namespace=dev` | Sets the current default namespace to `dev`.       |
+| `kubectl delete namespace dev`                         | Deletes the namespace and all resources inside it. |
+
+---
+
+## 📁 6. **Managing ConfigMaps & Secrets**
+
+| Command                                                                | Explanation                                       |
+| ---------------------------------------------------------------------- | ------------------------------------------------- |
+| `kubectl create configmap my-config --from-literal=key1=value1`        | Creates a configmap from literal key-value pairs. |
+| `kubectl create secret generic my-secret --from-literal=password=1234` | Creates a generic secret.                         |
+| `kubectl get configmaps`                                               | Lists all ConfigMaps.                             |
+| `kubectl describe secret my-secret`                                    | Shows encoded secret details (base64 format).     |
+
+---
+
+## 🔄 7. **Working with Services**
+
+| Command                                              | Explanation                                                    |
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| `kubectl get svc`                                    | Lists services.                                                |
+| `kubectl expose pod nginx --port=80 --type=NodePort` | Exposes a single pod as a NodePort service.                    |
+| `kubectl describe svc nginx`                         | Shows details like cluster IP, endpoints, etc.                 |
+| `kubectl port-forward svc/nginx 8080:80`             | Forwards local port 8080 to pod's port 80 through the service. |
+
+---
+
+## ☸️ 8. **Advanced Objects**
+
+| Object      | Command                          | Explanation                                |
+| ----------- | -------------------------------- | ------------------------------------------ |
+| StatefulSet | `kubectl get statefulsets`       | Manage pods with stable identities.        |
+| DaemonSet   | `kubectl get daemonsets`         | Ensures a pod runs on all (or some) nodes. |
+| Job         | `kubectl create -f job.yaml`     | Runs batch tasks once and stops.           |
+| CronJob     | `kubectl create -f cronjob.yaml` | Schedules jobs based on time (like cron).  |
+
+---
+
+## 🧼 9. **Deleting Resources**
+
+| Command                              | Explanation                            |
+| ------------------------------------ | -------------------------------------- |
+| `kubectl delete pod <pod-name>`      | Deletes a pod manually.                |
+| `kubectl delete -f <file.yaml>`      | Deletes resources defined in the file. |
+| `kubectl delete service <svc-name>`  | Deletes a service.                     |
+| `kubectl delete namespace <ns-name>` | Deletes an entire namespace.           |
+
+---
+
+## 🗃️ 10. **YAML Dry-Run and Output**
+
+| Command                                                                  | Explanation                                   |
+| ------------------------------------------------------------------------ | --------------------------------------------- |
+| `kubectl apply -f deploy.yaml --dry-run=client`                          | Checks validity of YAML without applying it.  |
+| `kubectl create deployment nginx --image=nginx --dry-run=client -o yaml` | Generates YAML without creating the resource. |
+
+---
+
+## 🧪 11. **Resource Editing & Patching**
+
+| Command                                                         | Explanation                                           |
+| --------------------------------------------------------------- | ----------------------------------------------------- |
+| `kubectl edit deployment nginx`                                 | Opens live editable config in editor.                 |
+| `kubectl patch deployment nginx -p '{"spec": {"replicas": 4}}'` | Patches the deployment without editing YAML manually. |
+
+---
+
+## 📦 12. **Apply/Replace Commands**
+
+| Command                            | Explanation                                                     |
+| ---------------------------------- | --------------------------------------------------------------- |
+| `kubectl apply -f resource.yaml`   | Idempotent: creates or updates resource. Preferred method.      |
+| `kubectl replace -f resource.yaml` | Replaces an existing resource. Fails if resource doesn’t exist. |
+
+---
+
+## 🧩 13. **Working with Labels and Selectors**
+
+| Command                           | Explanation                      |
+| --------------------------------- | -------------------------------- |
+| `kubectl label pod nginx app=web` | Adds a label to a pod.           |
+| `kubectl get pods -l app=web`     | Gets pods with specific label.   |
+| `kubectl delete pods -l app=web`  | Deletes all pods matching label. |
+
+---
+
+## 📜 14. **Resource YAML Templates**
+
+### Deployment Template (nginx)
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+```
+
+---
+
+## 📘 Summary Cheat Sheet
+
+| Task                 | Command                                                         |
+| -------------------- | --------------------------------------------------------------- |
+| View cluster info    | `kubectl cluster-info`                                          |
+| View resources       | `kubectl get all`                                               |
+| View logs            | `kubectl logs <pod>`                                            |
+| Connect to pod shell | `kubectl exec -it <pod> -- bash`                                |
+| Apply YAML           | `kubectl apply -f file.yaml`                                    |
+| Scale                | `kubectl scale deployment <name> --replicas=N`                  |
+| Port forward         | `kubectl port-forward svc/<svc> 8080:80`                        |
+| Delete               | `kubectl delete -f file.yaml` or `kubectl delete <type> <name>` |
+
+---
+
+Would you like this as a **PDF**, or do you want **interactive command examples with output** next?
